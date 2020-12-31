@@ -17,7 +17,11 @@ import {
   defineReactive
 } from '../util/index'
 
-export function initGlobalAPI (Vue: GlobalAPI) {
+/**
+ * 为vue实例添加全局api
+ * @param {*} Vue
+ */
+export function initGlobalAPI(Vue: GlobalAPI) {
   // config
   const configDef = {}
   configDef.get = () => config

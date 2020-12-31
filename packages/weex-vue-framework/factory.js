@@ -4,28 +4,40 @@ const { default: VNode } = require("../../src/core/vdom/vnode");
 
 module.exports = function weexFactory(exports, renderer) {
 
-  /*  */
 
-  // these helpers produces better vm code in JS engines due to their
-  // explicitness and function inlining
+
+  // 常用的一些方法
+
+  /**
+   * 判断内容为 undefined/null
+   */
   function isUndef(v) {
     return v === undefined || v === null
   }
 
+  /**
+   * 判断内容为 非undefined/null
+   */
   function isDef(v) {
     return v !== undefined && v !== null
   }
 
+  /**
+   * 判断内容为 true
+   */
   function isTrue(v) {
     return v === true
   }
 
+  /**
+   * 判断内容为 false
+   */
   function isFalse(v) {
     return v === false
   }
 
   /**
-   * Check if value is primitive
+   * 判断内容是否为 简单数据类型 string number boolean
    */
   function isPrimitive(value) {
     return (
@@ -36,9 +48,7 @@ module.exports = function weexFactory(exports, renderer) {
   }
 
   /**
-   * Quick object check - this is primarily used to tell
-   * Objects from primitive values when we know the value
-   * is a JSON-compliant type.
+   * 简单判断内容是否为 object
    */
   function isObject(obj) {
     return obj !== null && typeof obj === 'object'
@@ -47,13 +57,15 @@ module.exports = function weexFactory(exports, renderer) {
   var _toString = Object.prototype.toString;
 
   /**
-   * Strict object type check. Only returns true
-   * for plain JavaScript objects.
+   * 严格判断内容是否为 object
    */
   function isPlainObject(obj) {
     return _toString.call(obj) === '[object Object]'
   }
 
+  /**
+   * 严格判断内容是否为正则表达式
+   */
   function isRegExp(v) {
     return _toString.call(v) === '[object RegExp]'
   }
@@ -67,7 +79,7 @@ module.exports = function weexFactory(exports, renderer) {
   }
 
   /**
-   * Convert a value to a string that is actually rendered.
+   * 将值转换为字符串
    */
   function toString(val) {
     return val == null
@@ -78,8 +90,7 @@ module.exports = function weexFactory(exports, renderer) {
   }
 
   /**
-   * Convert a input value to a number for persistence.
-   * If the conversion fails, return original string.
+   * 将值转换为数字
    */
   function toNumber(val) {
     var n = parseFloat(val);
@@ -87,8 +98,9 @@ module.exports = function weexFactory(exports, renderer) {
   }
 
   /**
-   * Make a map and return a function for checking if a key
-   * is in that map.
+   * 返回函数:return是否包含的映射关系
+   * @param {*} str 以 , 分割的字符串 a,b,c,dd
+   * @param {*} expectsLowerCase 是否区分大小写
    */
   function makeMap(
     str,
@@ -105,17 +117,17 @@ module.exports = function weexFactory(exports, renderer) {
   }
 
   /**
-   * Check if a tag is a built-in tag.
+   * 是否包含 'slot,component' 区分大小写
    */
   var isBuiltInTag = makeMap('slot,component', true);
 
   /**
-   * Check if a attribute is a reserved attribute.
+   * 是否包含 'key,ref,slot,is' 不区分大小写
    */
   var isReservedAttribute = makeMap('key,ref,slot,is');
 
   /**
-   * Remove an item from an array
+   * 从数组中移除某一项
    */
   function remove(arr, item) {
     if (arr.length) {
@@ -127,7 +139,7 @@ module.exports = function weexFactory(exports, renderer) {
   }
 
   /**
-   * Check whether the object has the property.
+   * 检查对象中是否有这一项
    */
   var hasOwnProperty = Object.prototype.hasOwnProperty;
   function hasOwn(obj, key) {
@@ -202,7 +214,7 @@ module.exports = function weexFactory(exports, renderer) {
   }
 
   /**
-   * Mix properties into target object.
+   * 将属性混合到目标对象中 类似于 Object.assign()
    */
   function extend(to, _from) {
     for (var key in _from) {
@@ -212,7 +224,7 @@ module.exports = function weexFactory(exports, renderer) {
   }
 
   /**
-   * Merge an Array of Objects into a single Object.
+   * 将对象数组合并为单个对象 [{a:1,b:2},{c,:3}] => {a:1,b:2,c:3}
    */
   function toObject(arr) {
     var res = {};
@@ -324,7 +336,7 @@ module.exports = function weexFactory(exports, renderer) {
     'deactivated'
   ];
 
-  /*  */
+
 
   var config = ({
     /**
@@ -412,7 +424,7 @@ module.exports = function weexFactory(exports, renderer) {
     _lifecycleHooks: LIFECYCLE_HOOKS
   });
 
-  /*  */
+
 
   var emptyObject = Object.freeze({});
 
@@ -454,7 +466,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   var warn = noop;
   var tip = noop;
@@ -553,7 +565,7 @@ module.exports = function weexFactory(exports, renderer) {
     };
   }
 
-  /*  */
+
 
   function handleError(err, vm, info) {
     if (config.errorHandler) {
@@ -571,7 +583,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
   /* globals MutationObserver */
 
   // can we use __proto__?
@@ -744,7 +756,7 @@ module.exports = function weexFactory(exports, renderer) {
     }());
   }
 
-  /*  */
+
 
 
   var uid$1 = 0;
@@ -836,7 +848,7 @@ module.exports = function weexFactory(exports, renderer) {
       });
     });
 
-  /*  */
+
 
   var arrayKeys = Object.getOwnPropertyNames(arrayMethods);
 
@@ -1080,7 +1092,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   /**
    * Option overwriting strategies are functions that handle
@@ -1435,7 +1447,7 @@ module.exports = function weexFactory(exports, renderer) {
     return res
   }
 
-  /*  */
+
 
   function validateProp(
     key,
@@ -1599,7 +1611,7 @@ module.exports = function weexFactory(exports, renderer) {
     return false
   }
 
-  /*  */
+
 
   /* not type checking this file because flow doesn't play well with Proxy */
 
@@ -1698,7 +1710,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   var VNode = function VNode(
     tag,
@@ -1788,7 +1800,7 @@ module.exports = function weexFactory(exports, renderer) {
     return res
   }
 
-  /*  */
+
 
   var normalizeEvent = cached(function (name) {
     var passive = name.charAt(0) === '&';
@@ -1859,7 +1871,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   function mergeVNodeHook(def, hookKey, hook) {
     var invoker;
@@ -1891,7 +1903,7 @@ module.exports = function weexFactory(exports, renderer) {
     def[hookKey] = invoker;
   }
 
-  /*  */
+
 
   function extractPropsFromVNodeData(
     data,
@@ -1959,7 +1971,7 @@ module.exports = function weexFactory(exports, renderer) {
     return false
   }
 
-  /*  */
+
 
   // The template compiler attempts to minimize the need for normalization by
   // statically analyzing the template at compile time.
@@ -2037,7 +2049,7 @@ module.exports = function weexFactory(exports, renderer) {
     return res
   }
 
-  /*  */
+
 
   function ensureCtor(comp, base) {
     if (comp.__esModule && comp.default) {
@@ -2163,7 +2175,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   function getFirstComponentChild(children) {
     if (Array.isArray(children)) {
@@ -2176,9 +2188,9 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
 
-  /*  */
+
+
 
   function initEvents(vm) {
     vm._events = Object.create(null);
@@ -2313,7 +2325,7 @@ module.exports = function weexFactory(exports, renderer) {
     };
   }
 
-  /*  */
+
 
   /**
    * Runtime helper for resolving raw children VNodes into a slot object.
@@ -2371,7 +2383,7 @@ module.exports = function weexFactory(exports, renderer) {
     return res
   }
 
-  /*  */
+
 
   var activeInstance = null;
   var isUpdatingChildComponent = false;
@@ -2679,7 +2691,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
 
   var MAX_UPDATE_COUNT = 100;
@@ -2819,7 +2831,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   var uid$2 = 0;
 
@@ -3062,7 +3074,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   var sharedPropertyDefinition = {
     enumerable: true,
@@ -3378,7 +3390,7 @@ module.exports = function weexFactory(exports, renderer) {
     };
   }
 
-  /*  */
+
 
   function initProvide(vm) {
     var provide = vm.$options.provide;
@@ -3439,7 +3451,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   function createFunctionalComponent(
     Ctor,
@@ -3487,7 +3499,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   // hooks to be invoked on component VNodes during patch
   var componentVNodeHooks = {
@@ -3716,7 +3728,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   var SIMPLE_NORMALIZE = 1;
   var ALWAYS_NORMALIZE = 2;
@@ -3838,7 +3850,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   /**
    * Runtime helper for rendering v-for lists.
@@ -3872,7 +3884,7 @@ module.exports = function weexFactory(exports, renderer) {
     return ret
   }
 
-  /*  */
+
 
   /**
    * Runtime helper for rendering <slot>
@@ -3905,7 +3917,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   /**
    * Runtime helper for resolving filters
@@ -3914,7 +3926,7 @@ module.exports = function weexFactory(exports, renderer) {
     return resolveAsset(this.$options, 'filters', id, true) || identity
   }
 
-  /*  */
+
 
   /**
    * Runtime helper for checking keyCodes from config.
@@ -3932,7 +3944,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   /**
    * Runtime helper for merging v-bind="object" into a VNode's data.
@@ -3986,7 +3998,7 @@ module.exports = function weexFactory(exports, renderer) {
     return data
   }
 
-  /*  */
+
 
   /**
    * Runtime helper for rendering static trees.
@@ -4045,7 +4057,7 @@ module.exports = function weexFactory(exports, renderer) {
     node.isOnce = isOnce;
   }
 
-  /*  */
+
 
   function bindObjectListeners(data, value) {
     if (value) {
@@ -4066,7 +4078,7 @@ module.exports = function weexFactory(exports, renderer) {
     return data
   }
 
-  /*  */
+
 
   function initRender(vm) {
     vm._vnode = null; // the root of the child tree
@@ -4181,7 +4193,7 @@ module.exports = function weexFactory(exports, renderer) {
     Vue.prototype._g = bindObjectListeners;
   }
 
-  /*  */
+
 
   var uid = 0;
 
@@ -4333,7 +4345,7 @@ module.exports = function weexFactory(exports, renderer) {
   lifecycleMixin(Vue$2);
   renderMixin(Vue$2);
 
-  /*  */
+
 
   function initUse(Vue) {
     Vue.use = function (plugin) {
@@ -4355,7 +4367,7 @@ module.exports = function weexFactory(exports, renderer) {
     };
   }
 
-  /*  */
+
 
   function initMixin$1(Vue) {
     Vue.mixin = function (mixin) {
@@ -4364,7 +4376,7 @@ module.exports = function weexFactory(exports, renderer) {
     };
   }
 
-  /*  */
+
 
   function initExtend(Vue) {
     /**
@@ -4462,7 +4474,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   function initAssetRegisters(Vue) {
     /**
@@ -4499,7 +4511,7 @@ module.exports = function weexFactory(exports, renderer) {
     });
   }
 
-  /*  */
+
 
   var patternTypes = [String, RegExp, Array];
 
@@ -4540,6 +4552,9 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
+  /**
+   * 配置路由缓存
+   */
   var KeepAlive = {
     name: 'keep-alive',
     abstract: true,
@@ -4602,8 +4617,10 @@ module.exports = function weexFactory(exports, renderer) {
     KeepAlive: KeepAlive
   };
 
-  /*  */
 
+  /**
+   * 初始化全局变量 配置config
+   */
   function initGlobalAPI(Vue) {
     // config
     var configDef = {};
@@ -4760,7 +4777,7 @@ module.exports = function weexFactory(exports, renderer) {
     setAttribute: setAttribute
   });
 
-  /*  */
+
 
   var ref = {
     create: function create(_, vnode) {
@@ -5476,7 +5493,7 @@ module.exports = function weexFactory(exports, renderer) {
     }
   }
 
-  /*  */
+
 
   var directives = {
     create: updateDirectives,
@@ -5594,7 +5611,7 @@ module.exports = function weexFactory(exports, renderer) {
     directives
   ];
 
-  /*  */
+
 
   function updateAttrs(oldVnode, vnode) {
     if (!oldVnode.data.attrs && !vnode.data.attrs) {
@@ -5628,7 +5645,7 @@ module.exports = function weexFactory(exports, renderer) {
     update: updateAttrs
   };
 
-  /*  */
+
 
   function updateClass(oldVnode, vnode) {
     var el = vnode.elm;
@@ -5694,7 +5711,7 @@ module.exports = function weexFactory(exports, renderer) {
     update: updateClass
   };
 
-  /*  */
+
 
   var target$1;
 
@@ -5747,7 +5764,7 @@ module.exports = function weexFactory(exports, renderer) {
     update: updateDOMListeners
   };
 
-  /*  */
+
 
   var normalize = cached(camelize);
 
@@ -5814,7 +5831,7 @@ module.exports = function weexFactory(exports, renderer) {
     update: updateStyle
   };
 
-  /*  */
+
 
   /**
    * Add class with compatibility for SVG since classList is not supported on
@@ -5827,7 +5844,7 @@ module.exports = function weexFactory(exports, renderer) {
    * SVG elements in IE
    */
 
-  /*  */
+
 
   function resolveTransition(def$$1) {
     if (!def$$1) {
@@ -6134,7 +6151,7 @@ module.exports = function weexFactory(exports, renderer) {
     transition
   ];
 
-  /*  */
+
 
   // the directive module should be applied last, after all
   // built-in modules have been applied.
@@ -6149,7 +6166,7 @@ module.exports = function weexFactory(exports, renderer) {
   var platformDirectives = {
   };
 
-  /*  */
+
 
   // Provides transition support for a single element/component.
   // supports transition mode (out-in / in-out)
@@ -6533,7 +6550,7 @@ module.exports = function weexFactory(exports, renderer) {
     return placeholder
   }
 
-  /*  */
+
 
   // install platform specific utils
   Vue$2.config.mustUseProp = mustUseProp;
