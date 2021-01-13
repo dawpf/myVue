@@ -5,15 +5,15 @@ import { isObject, isDef } from 'core/util/index'
 /**
  * Runtime helper for rendering v-for lists.
  */
-export function renderList (
-  val: any,
-  render: (
-    val: any,
-    keyOrIndex: string | number,
-    index?: number
+export function renderList(
+  val,
+  render = (
+    val,
+    keyOrIndex,
+    index
   ) => VNode
-): ?Array<VNode> {
-  let ret: ?Array<VNode>, i, l, keys, key
+) {
+  let ret, i, l, keys, key
   if (Array.isArray(val) || typeof val === 'string') {
     ret = new Array(val.length)
     for (i = 0, l = val.length; i < l; i++) {
@@ -33,7 +33,7 @@ export function renderList (
     }
   }
   if (isDef(ret)) {
-    (ret: any)._isVList = true
+    (ret)._isVList = true
   }
   return ret
 }

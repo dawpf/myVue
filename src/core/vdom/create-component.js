@@ -29,12 +29,12 @@ import {
 
 // hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
-  init (
-    vnode: VNodeWithData,
-    hydrating: boolean,
-    parentElm: ?Node,
-    refElm: ?Node
-  ): ?boolean {
+  init(
+    vnode,
+    hydrating,
+    parentElm,
+    refElm
+  ) {
     if (!vnode.componentInstance || vnode.componentInstance._isDestroyed) {
       const child = vnode.componentInstance = createComponentInstanceForVnode(
         vnode,
@@ -45,12 +45,12 @@ const componentVNodeHooks = {
       child.$mount(hydrating ? vnode.elm : undefined, hydrating)
     } else if (vnode.data.keepAlive) {
       // kept-alive components, treat as a patch
-      const mountedNode: any = vnode // work around flow
+      const mountedNode = vnode // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
     }
   },
 
-  prepatch (oldVnode: MountedComponentVNode, vnode: MountedComponentVNode) {
+  prepatch(oldVnode, vnode) {
     const options = vnode.componentOptions
     const child = vnode.componentInstance = oldVnode.componentInstance
     updateChildComponent(
@@ -62,7 +62,7 @@ const componentVNodeHooks = {
     )
   },
 
-  insert (vnode: MountedComponentVNode) {
+  insert(vnode) {
     const { context, componentInstance } = vnode
     if (!componentInstance._isMounted) {
       componentInstance._isMounted = true
@@ -82,7 +82,7 @@ const componentVNodeHooks = {
     }
   },
 
-  destroy (vnode: MountedComponentVNode) {
+  destroy(vnode) {
     const { componentInstance } = vnode
     if (!componentInstance._isDestroyed) {
       if (!vnode.data.keepAlive) {
@@ -96,13 +96,13 @@ const componentVNodeHooks = {
 
 const hooksToMerge = Object.keys(componentVNodeHooks)
 
-export function createComponent (
-  Ctor: Class<Component> | Function | Object | void,
-  data: ?VNodeData,
-  context: Component,
-  children: ?Array<VNode>,
-  tag?: string
-): VNode | void {
+export function createComponent(
+  Ctor,
+  data,
+  context,
+  children,
+  tag
+) {
   if (isUndef(Ctor)) {
     return
   }
@@ -194,14 +194,14 @@ export function createComponent (
   return vnode
 }
 
-export function createComponentInstanceForVnode (
-  vnode: any, // we know it's MountedComponentVNode but flow doesn't
-  parent: any, // activeInstance in lifecycle state
-  parentElm?: ?Node,
-  refElm?: ?Node
-): Component {
+export function createComponentInstanceForVnode(
+  vnode, // we know it's MountedComponentVNode but flow doesn't
+  parent, // activeInstance in lifecycle state
+  parentElm,
+  refElm
+) {
   const vnodeComponentOptions = vnode.componentOptions
-  const options: InternalComponentOptions = {
+  const options = {
     _isComponent: true,
     parent,
     propsData: vnodeComponentOptions.propsData,
@@ -221,7 +221,7 @@ export function createComponentInstanceForVnode (
   return new vnodeComponentOptions.Ctor(options)
 }
 
-function mergeHooks (data: VNodeData) {
+function mergeHooks(data) {
   if (!data.hook) {
     data.hook = {}
   }
@@ -233,7 +233,7 @@ function mergeHooks (data: VNodeData) {
   }
 }
 
-function mergeHook (one: Function, two: Function): Function {
+function mergeHook(one, two) {
   return function (a, b, c, d) {
     one(a, b, c, d)
     two(a, b, c, d)
@@ -242,10 +242,10 @@ function mergeHook (one: Function, two: Function): Function {
 
 // transform component v-model info (value and callback) into
 // prop and event handler respectively.
-function transformModel (options, data: any) {
+function transformModel(options, data) {
   const prop = (options.model && options.model.prop) || 'value'
   const event = (options.model && options.model.event) || 'input'
-  ;(data.props || (data.props = {}))[prop] = data.model.value
+    ; (data.props || (data.props = {}))[prop] = data.model.value
   const on = data.on || (data.on = {})
   if (isDef(on[event])) {
     on[event] = [data.model.callback].concat(on[event])

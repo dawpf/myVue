@@ -1,42 +1,42 @@
 /* @flow */
 
 export default class VNode {
-  tag: string | void;
-  data: VNodeData | void;
-  children: ?Array<VNode>;
-  text: string | void;
-  elm: Node | void;
-  ns: string | void;
-  context: Component | void; // rendered in this component's scope
-  key: string | number | void;
-  componentOptions: VNodeComponentOptions | void;
-  componentInstance: Component | void; // component instance
-  parent: VNode | void; // component placeholder node
+  // tag: string | void;
+  // data: VNodeData | void;
+  // children: ?Array<VNode>;
+  // text: string | void;
+  // elm: Node | void;
+  // ns: string | void;
+  // context: Component | void; // rendered in this component's scope
+  // key: string | number | void;
+  // componentOptions: VNodeComponentOptions | void;
+  // componentInstance: Component | void; // component instance
+  // parent: VNode | void; // component placeholder node
 
-  // strictly internal
-  raw: boolean; // contains raw HTML? (server only)
-  isStatic: boolean; // hoisted static node
-  isRootInsert: boolean; // necessary for enter transition check
-  isComment: boolean; // empty comment placeholder?
-  isCloned: boolean; // is a cloned node?
-  isOnce: boolean; // is a v-once node?
-  asyncFactory: Function | void; // async component factory function
-  asyncMeta: Object | void;
-  isAsyncPlaceholder: boolean;
-  ssrContext: Object | void;
-  functionalContext: Component | void; // real context vm for functional nodes
-  functionalOptions: ?ComponentOptions; // for SSR caching
-  functionalScopeId: ?string; // functioanl scope id support
+  // // strictly internal
+  // raw: boolean; // contains raw HTML? (server only)
+  // isStatic: boolean; // hoisted static node
+  // isRootInsert: boolean; // necessary for enter transition check
+  // isComment: boolean; // empty comment placeholder?
+  // isCloned: boolean; // is a cloned node?
+  // isOnce: boolean; // is a v-once node?
+  // asyncFactory: Function | void; // async component factory function
+  // asyncMeta: Object | void;
+  // isAsyncPlaceholder: boolean;
+  // ssrContext: Object | void;
+  // functionalContext: Component | void; // real context vm for functional nodes
+  // functionalOptions: ?ComponentOptions; // for SSR caching
+  // functionalScopeId: ?string; // functioanl scope id support
 
   constructor(
-    tag?: string,
-    data?: VNodeData,
-    children?: ?Array<VNode>,
-    text?: string,
-    elm?: Node,
-    context?: Component,
-    componentOptions?: VNodeComponentOptions,
-    asyncFactory?: Function
+    tag,
+    data,
+    children,
+    text,
+    elm,
+    context,
+    componentOptions,
+    asyncFactory
   ) {
     this.tag = tag;
     this.data = data;
@@ -65,16 +65,16 @@ export default class VNode {
 
   // DEPRECATED: alias for componentInstance for backwards compat.
   /* istanbul ignore next */
-  get child(): Component | void {
+  get child() {
     return this.componentInstance;
   }
 }
 
 /**
  * 导出空白 VNode
- * @param {*} text
+ * @param {String} text
  */
-export const createEmptyVNode = (text: string = "") => {
+export const createEmptyVNode = (text = "") => {
   const node = new VNode();
   node.text = text;
   node.isComment = true;
@@ -83,9 +83,9 @@ export const createEmptyVNode = (text: string = "") => {
 
 /**
  * 导出文本 VNode
- * @param {*} val
+ * @param {Number} val
  */
-export function createTextVNode(val: string | number) {
+export function createTextVNode(val) {
   return new VNode(undefined, undefined, undefined, String(val));
 }
 
@@ -95,10 +95,10 @@ export function createTextVNode(val: string | number) {
 // on their elm reference.
 /**
  * 克隆VNode
- * @param {*} vnode
- * @param {*} deep
+ * @param {VNode} vnode
+ * @param {Boolean} deep
  */
-export function cloneVNode(vnode: VNode, deep?: boolean): VNode {
+export function cloneVNode(vnode, deep) {
   const cloned = new VNode(
     vnode.tag,
     vnode.data,
@@ -122,13 +122,10 @@ export function cloneVNode(vnode: VNode, deep?: boolean): VNode {
 
 /**
  * 克隆多个VNode
- * @param {*} vnodes
- * @param {*} deep
+ * @param {VNode} vnodes
+ * @param {Boolean} deep
  */
-export function cloneVNodes(
-  vnodes: Array<VNode>,
-  deep?: boolean
-): Array<VNode> {
+export function cloneVNodes(vnodes, deep) {
   const len = vnodes.length;
   const res = new Array(len);
   for (let i = 0; i < len; i++) {

@@ -15,7 +15,7 @@ import VNode, { cloneVNodes, createEmptyVNode } from '../vdom/vnode'
 
 import { isUpdatingChildComponent } from './lifecycle'
 
-export function initRender (vm: Component) {
+export function initRender(vm) {
   vm._vnode = null // the root of the child tree
   const options = vm.$options
   const parentVnode = vm.$vnode = options._parentVnode // the placeholder node in parent tree
@@ -49,16 +49,16 @@ export function initRender (vm: Component) {
   }
 }
 
-export function renderMixin (Vue: Class<Component>) {
+export function renderMixin(Vue) {
   // install runtime convenience helpers
   installRenderHelpers(Vue.prototype)
 
-  Vue.prototype.$nextTick = function (fn: Function) {
+  Vue.prototype.$nextTick = function (fn) {
     return nextTick(fn, this)
   }
 
-  Vue.prototype._render = function (): VNode {
-    const vm: Component = this
+  Vue.prototype._render = function () {
+    const vm = this
     const { render, _parentVnode } = vm.$options
 
     if (vm._isMounted) {

@@ -24,13 +24,13 @@ if (inBrowser) {
   try {
     const opts = {}
     Object.defineProperty(opts, 'passive', ({
-      get () {
+      get() {
         /* istanbul ignore next */
         supportsPassive = true
       }
-    }: Object)) // https://github.com/facebook/flow/issues/285
+    })) // https://github.com/facebook/flow/issues/285
     window.addEventListener('test-passive', null, opts)
-  } catch (e) {}
+  } catch (e) { }
 }
 
 // this needs to be lazy-evaled because vue may be required before
@@ -54,7 +54,7 @@ export const isServerRendering = () => {
 export const devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__
 
 /* istanbul ignore next */
-export function isNative (Ctor: any): boolean {
+export function isNative(Ctor) {
   return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
 }
 
@@ -70,7 +70,7 @@ export const nextTick = (function () {
   let pending = false
   let timerFunc
 
-  function nextTickHandler () {
+  function nextTickHandler() {
     pending = false
     const copies = callbacks.slice(0)
     callbacks.length = 0
@@ -104,21 +104,21 @@ export const nextTick = (function () {
       port.postMessage(1)
     }
   } else
-  /* istanbul ignore next */
-  if (typeof Promise !== 'undefined' && isNative(Promise)) {
-    // use microtask in non-DOM environments, e.g. Weex
-    const p = Promise.resolve()
-    timerFunc = () => {
-      p.then(nextTickHandler)
+    /* istanbul ignore next */
+    if (typeof Promise !== 'undefined' && isNative(Promise)) {
+      // use microtask in non-DOM environments, e.g. Weex
+      const p = Promise.resolve()
+      timerFunc = () => {
+        p.then(nextTickHandler)
+      }
+    } else {
+      // fallback to setTimeout
+      timerFunc = () => {
+        setTimeout(nextTickHandler, 0)
+      }
     }
-  } else {
-    // fallback to setTimeout
-    timerFunc = () => {
-      setTimeout(nextTickHandler, 0)
-    }
-  }
 
-  return function queueNextTick (cb?: Function, ctx?: Object) {
+  return function queueNextTick(cb, ctx) {
     let _resolve
     callbacks.push(() => {
       if (cb) {
@@ -151,28 +151,29 @@ if (typeof Set !== 'undefined' && isNative(Set)) {
   _Set = Set
 } else {
   // a non-standard Set polyfill that only works with primitive keys.
-  _Set = class Set implements ISet {
-    set: Object;
-    constructor () {
+  _Set = class Set extends ISet {
+    set;
+    constructor() {
       this.set = Object.create(null)
     }
-    has (key: string | number) {
+    has(key) {
       return this.set[key] === true
     }
-    add (key: string | number) {
+    add(key) {
       this.set[key] = true
     }
-    clear () {
+    clear() {
       this.set = Object.create(null)
     }
   }
 }
 
-interface ISet {
-  has(key: string | number): boolean;
-  add(key: string | number): mixed;
-  clear(): void;
+class ISet {
+  has = (key) => { };
+  add = (key) => { };
+  clear()
 }
 
 export { _Set }
-export type { ISet }
+
+export { ISet }

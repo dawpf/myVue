@@ -5,8 +5,8 @@ import { noop } from 'shared/util'
 
 export let warn = noop
 export let tip = noop
-export let generateComponentTrace = (noop: any) // work around flow check
-export let formatComponentName = (noop: any)
+export let generateComponentTrace = (noop) // work around flow check
+export let formatComponentName = (noop)
 
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
@@ -87,11 +87,11 @@ if (process.env.NODE_ENV !== 'production') {
       return '\n\nfound in\n\n' + tree
         .map((vm, i) => `${
           i === 0 ? '---> ' : repeat(' ', 5 + i * 2)
-        }${
+          }${
           Array.isArray(vm)
             ? `${formatComponentName(vm[0])}... (${vm[1]} recursive calls)`
             : formatComponentName(vm)
-        }`)
+          }`)
         .join('\n')
     } else {
       return `\n\n(found in ${formatComponentName(vm)})`

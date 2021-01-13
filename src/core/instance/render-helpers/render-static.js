@@ -5,10 +5,10 @@ import { cloneVNode, cloneVNodes } from 'core/vdom/vnode'
 /**
  * Runtime helper for rendering static trees.
  */
-export function renderStatic (
-  index: number,
-  isInFor?: boolean
-): VNode | Array<VNode> {
+export function renderStatic(
+  index,
+  isInFor
+) {
   // static trees can be rendered once and cached on the contructor options
   // so every instance shares the same cached trees
   const renderFns = this.$options.staticRenderFns
@@ -31,19 +31,19 @@ export function renderStatic (
  * Runtime helper for v-once.
  * Effectively it means marking the node as static with a unique key.
  */
-export function markOnce (
-  tree: VNode | Array<VNode>,
-  index: number,
-  key: string
+export function markOnce(
+  tree,
+  index,
+  key
 ) {
   markStatic(tree, `__once__${index}${key ? `_${key}` : ``}`, true)
   return tree
 }
 
-function markStatic (
-  tree: VNode | Array<VNode>,
-  key: string,
-  isOnce: boolean
+function markStatic(
+  tree,
+  key,
+  isOnce
 ) {
   if (Array.isArray(tree)) {
     for (let i = 0; i < tree.length; i++) {
@@ -56,7 +56,7 @@ function markStatic (
   }
 }
 
-function markStaticNode (node, key, isOnce) {
+function markStaticNode(node, key, isOnce) {
   node.isStatic = true
   node.key = key
   node.isOnce = isOnce

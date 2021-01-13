@@ -2,7 +2,7 @@
 
 import { warn, extend, isPlainObject } from 'core/util/index'
 
-export function bindObjectListeners (data: any, value: any): VNodeData {
+export function bindObjectListeners(data, value) {
   if (value) {
     if (!isPlainObject(value)) {
       process.env.NODE_ENV !== 'production' && warn(

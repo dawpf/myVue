@@ -3,10 +3,10 @@
 /**
  * Runtime helper for resolving raw children VNodes into a slot object.
  */
-export function resolveSlots (
-  children: ?Array<VNode>,
-  context: ?Component
-): { [key: string]: Array<VNode> } {
+export function resolveSlots(
+  children,
+  context
+) {
   const slots = {}
   if (!children) {
     return slots
@@ -42,14 +42,14 @@ export function resolveSlots (
   return slots
 }
 
-function isWhitespace (node: VNode): boolean {
+function isWhitespace(node) {
   return node.isComment || node.text === ' '
 }
 
-export function resolveScopedSlots (
-  fns: ScopedSlotsData, // see flow/vnode
-  res?: Object
-): { [key: string]: Function } {
+export function resolveScopedSlots(
+  fns, // see flow/vnode
+  res
+) {
   res = res || {}
   for (let i = 0; i < fns.length; i++) {
     if (Array.isArray(fns[i])) {

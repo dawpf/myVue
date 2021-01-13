@@ -5,7 +5,7 @@ export const emptyObject = Object.freeze({})
 /**
  * Check if a string starts with $ or _
  */
-export function isReserved (str: string): boolean {
+export function isReserved(str) {
   const c = (str + '').charCodeAt(0)
   return c === 0x24 || c === 0x5F
 }
@@ -13,7 +13,7 @@ export function isReserved (str: string): boolean {
 /**
  * Define a property.
  */
-export function def (obj: Object, key: string, val: any, enumerable?: boolean) {
+export function def(obj, key, val, enumerable) {
   Object.defineProperty(obj, key, {
     value: val,
     enumerable: !!enumerable,
@@ -26,7 +26,7 @@ export function def (obj: Object, key: string, val: any, enumerable?: boolean) {
  * Parse simple path.
  */
 const bailRE = /[^\w.$]/
-export function parsePath (path: string): any {
+export function parsePath(path) {
   if (bailRE.test(path)) {
     return
   }

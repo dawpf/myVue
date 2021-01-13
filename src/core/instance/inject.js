@@ -4,7 +4,7 @@ import { warn } from '../util/index'
 import { hasSymbol } from 'core/util/env'
 import { defineReactive, observerState } from '../observer/index'
 
-export function initProvide (vm: Component) {
+export function initProvide(vm) {
   const provide = vm.$options.provide
   if (provide) {
     vm._provided = typeof provide === 'function'
@@ -13,7 +13,7 @@ export function initProvide (vm: Component) {
   }
 }
 
-export function initInjections (vm: Component) {
+export function initInjections(vm) {
   const result = resolveInject(vm.$options.inject, vm)
   if (result) {
     observerState.shouldConvert = false
@@ -36,16 +36,16 @@ export function initInjections (vm: Component) {
   }
 }
 
-export function resolveInject (inject: any, vm: Component): ?Object {
+export function resolveInject(inject, vm) {
   if (inject) {
     // inject is :any because flow is not smart enough to figure out cached
     const result = Object.create(null)
     const keys = hasSymbol
-        ? Reflect.ownKeys(inject).filter(key => {
-          /* istanbul ignore next */
-          return Object.getOwnPropertyDescriptor(inject, key).enumerable
-        })
-        : Object.keys(inject)
+      ? Reflect.ownKeys(inject).filter(key => {
+        /* istanbul ignore next */
+        return Object.getOwnPropertyDescriptor(inject, key).enumerable
+      })
+      : Object.keys(inject)
 
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]

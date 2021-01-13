@@ -4,15 +4,15 @@ import config from '../config'
 import { ASSET_TYPES } from 'shared/constants'
 import { warn, isPlainObject } from '../util/index'
 
-export function initAssetRegisters (Vue: GlobalAPI) {
+export function initAssetRegisters(Vue) {
   /**
    * Create asset registration methods.
    */
   ASSET_TYPES.forEach(type => {
     Vue[type] = function (
-      id: string,
-      definition: Function | Object
-    ): Function | Object | void {
+      id,
+      definition
+    ) {
       if (!definition) {
         return this.options[type + 's'][id]
       } else {

@@ -14,7 +14,7 @@ import {
   validateProp
 } from '../util/index'
 
-function FunctionalRenderContext (
+function FunctionalRenderContext(
   data,
   props,
   children,
@@ -47,7 +47,7 @@ function FunctionalRenderContext (
 
   if (options._scopeId) {
     this._c = (a, b, c, d) => {
-      const vnode: ?VNode = createElement(contextVm, a, b, c, d, needNormalization)
+      const vnode = createElement(contextVm, a, b, c, d, needNormalization)
       if (vnode) {
         vnode.functionalScopeId = options._scopeId
         vnode.functionalContext = parent
@@ -61,13 +61,13 @@ function FunctionalRenderContext (
 
 installRenderHelpers(FunctionalRenderContext.prototype)
 
-export function createFunctionalComponent (
-  Ctor: Class<Component>,
-  propsData: ?Object,
-  data: VNodeData,
-  contextVm: Component,
-  children: ?Array<VNode>
-): VNode | void {
+export function createFunctionalComponent(
+  Ctor,
+  propsData,
+  data,
+  contextVm,
+  children
+) {
   const options = Ctor.options
   const props = {}
   const propOptions = options.props
@@ -101,7 +101,7 @@ export function createFunctionalComponent (
   return vnode
 }
 
-function mergeProps (to, from) {
+function mergeProps(to, from) {
   for (const key in from) {
     to[camelize(key)] = from[key]
   }

@@ -8,12 +8,12 @@ import { hyphenate } from 'shared/util'
  * exposed as Vue.prototype._k
  * passing in eventKeyName as last argument separately for backwards compat
  */
-export function checkKeyCodes (
-  eventKeyCode: number,
-  key: string,
-  builtInAlias?: number | Array<number>,
-  eventKeyName?: string
-): ?boolean {
+export function checkKeyCodes(
+  eventKeyCode,
+  key,
+  builtInAlias,
+  eventKeyName
+) {
   const keyCodes = config.keyCodes[key] || builtInAlias
   if (keyCodes) {
     if (Array.isArray(keyCodes)) {

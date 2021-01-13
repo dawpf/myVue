@@ -21,7 +21,7 @@ import {
  * 为vue实例添加全局api
  * @param {*} Vue
  */
-export function initGlobalAPI(Vue: GlobalAPI) {
+export function initGlobalAPI(Vue) {
   // config
   const configDef = {}
   configDef.get = () => config

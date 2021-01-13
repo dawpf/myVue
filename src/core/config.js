@@ -8,29 +8,31 @@ import {
 
 import { LIFECYCLE_HOOKS } from 'shared/constants'
 
-export type Config = {
+const Config = {
   // user
-  optionMergeStrategies: { [key: string]: Function };
-  silent: boolean;
-  productionTip: boolean;
-  performance: boolean;
-  devtools: boolean;
-  errorHandler: ?(err: Error, vm: Component, info: string) => void;
-  warnHandler: ?(msg: string, vm: Component, trace: string) => void;
-  ignoredElements: Array<string>;
-  keyCodes: { [key: string]: number | Array<number> };
+  optionMergeStrategies: (key) => { },
+  silent: new Boolean(),
+  productionTip: new Boolean(),
+  performance: new Boolean(),
+  devtools: new Boolean(),
+  errorHandler: (err, vm, info) => { },
+  warnHandler: (msg, vm, trace) => { },
+  ignoredElements: [],
+  keyCodes: '',
 
   // platform
-  isReservedTag: (x?: string) => boolean;
-  isReservedAttr: (x?: string) => boolean;
-  parsePlatformTagName: (x: string) => string;
-  isUnknownElement: (x?: string) => boolean;
-  getTagNamespace: (x?: string) => string | void;
-  mustUseProp: (tag: string, type: ?string, name: string) => boolean;
+  isReservedTag: new Boolean(),
+  isReservedAttr: new Boolean(),
+  parsePlatformTagName: new String(),
+  isUnknownElement: new Boolean(),
+  getTagNamespace: new String(),
+  mustUseProp: () => { tag, type, name },
 
   // legacy
-  _lifecycleHooks: Array<string>;
+  _lifecycleHooks: new Array(),
 };
+
+export { Config }
 
 export default ({
   /**
@@ -116,4 +118,4 @@ export default ({
    * Exposed for legacy reasons
    */
   _lifecycleHooks: LIFECYCLE_HOOKS
-}: Config)
+})

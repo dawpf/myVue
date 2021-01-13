@@ -17,10 +17,10 @@ import {
   validateProp
 } from '../util/index'
 
-export let activeInstance: any = null
-export let isUpdatingChildComponent: boolean = false
+export let activeInstance = null
+export let isUpdatingChildComponent = false
 
-export function initLifecycle (vm: Component) {
+export function initLifecycle(vm) {
   const options = vm.$options
 
   // locate first non-abstract parent
@@ -46,9 +46,9 @@ export function initLifecycle (vm: Component) {
   vm._isBeingDestroyed = false
 }
 
-export function lifecycleMixin (Vue: Class<Component>) {
-  Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
-    const vm: Component = this
+export function lifecycleMixin(Vue) {
+  Vue.prototype._update = function (vnode, hydrating) {
+    const vm = this
     if (vm._isMounted) {
       callHook(vm, 'beforeUpdate')
     }
@@ -90,14 +90,14 @@ export function lifecycleMixin (Vue: Class<Component>) {
   }
 
   Vue.prototype.$forceUpdate = function () {
-    const vm: Component = this
+    const vm = this
     if (vm._watcher) {
       vm._watcher.update()
     }
   }
 
   Vue.prototype.$destroy = function () {
-    const vm: Component = this
+    const vm = this
     if (vm._isBeingDestroyed) {
       return
     }
@@ -140,11 +140,11 @@ export function lifecycleMixin (Vue: Class<Component>) {
   }
 }
 
-export function mountComponent (
-  vm: Component,
-  el: ?Element,
-  hydrating?: boolean
-): Component {
+export function mountComponent(
+  vm,
+  el,
+  hydrating
+) {
   vm.$el = el
   if (!vm.$options.render) {
     vm.$options.render = createEmptyVNode
@@ -205,12 +205,12 @@ export function mountComponent (
   return vm
 }
 
-export function updateChildComponent (
-  vm: Component,
-  propsData: ?Object,
-  listeners: ?Object,
-  parentVnode: VNode,
-  renderChildren: ?Array<VNode>
+export function updateChildComponent(
+  vm,
+  propsData,
+  listeners,
+  parentVnode,
+  renderChildren
 ) {
   if (process.env.NODE_ENV !== 'production') {
     isUpdatingChildComponent = true
@@ -270,14 +270,14 @@ export function updateChildComponent (
   }
 }
 
-function isInInactiveTree (vm) {
+function isInInactiveTree(vm) {
   while (vm && (vm = vm.$parent)) {
     if (vm._inactive) return true
   }
   return false
 }
 
-export function activateChildComponent (vm: Component, direct?: boolean) {
+export function activateChildComponent(vm, direct) {
   if (direct) {
     vm._directInactive = false
     if (isInInactiveTree(vm)) {
@@ -295,7 +295,7 @@ export function activateChildComponent (vm: Component, direct?: boolean) {
   }
 }
 
-export function deactivateChildComponent (vm: Component, direct?: boolean) {
+export function deactivateChildComponent(vm, direct) {
   if (direct) {
     vm._directInactive = true
     if (isInInactiveTree(vm)) {
@@ -311,7 +311,7 @@ export function deactivateChildComponent (vm: Component, direct?: boolean) {
   }
 }
 
-export function callHook (vm: Component, hook: string) {
+export function callHook(vm, hook) {
   const handlers = vm.$options[hook]
   if (handlers) {
     for (let i = 0, j = handlers.length; i < j; i++) {

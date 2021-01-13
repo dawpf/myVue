@@ -5,12 +5,12 @@ import { extend, warn, isObject } from 'core/util/index'
 /**
  * Runtime helper for rendering <slot>
  */
-export function renderSlot (
-  name: string,
-  fallback: ?Array<VNode>,
-  props: ?Object,
-  bindObject: ?Object
-): ?Array<VNode> {
+export function renderSlot(
+  name,
+  fallback,
+  props,
+  bindObject
+) {
   const scopedSlotFn = this.$scopedSlots[name]
   if (scopedSlotFn) { // scoped slot
     props = props || {}
