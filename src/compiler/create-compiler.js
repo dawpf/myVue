@@ -4,12 +4,12 @@ import { extend } from 'shared/util'
 import { detectErrors } from './error-detector'
 import { createCompileToFunctionFn } from './to-function'
 
-export function createCompilerCreator (baseCompile: Function): Function {
-  return function createCompiler (baseOptions: CompilerOptions) {
-    function compile (
-      template: string,
-      options?: CompilerOptions
-    ): CompiledResult {
+export function createCompilerCreator(baseCompile) {
+  return function createCompiler(baseOptions) {
+    function compile(
+      template,
+      options
+    ) {
       const finalOptions = Object.create(baseOptions)
       const errors = []
       const tips = []

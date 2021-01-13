@@ -12,10 +12,10 @@ const buildRegex = cached(delimiters => {
   return new RegExp(open + '((?:.|\\n)+?)' + close, 'g')
 })
 
-export function parseText (
-  text: string,
-  delimiters?: [string, string]
-): string | void {
+export function parseText(
+  text,
+  delimiters
+) {
   const tagRE = delimiters ? buildRegex(delimiters) : defaultTagRE
   if (!tagRE.test(text)) {
     return

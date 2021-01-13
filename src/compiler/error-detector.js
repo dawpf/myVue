@@ -22,15 +22,15 @@ const identRE = /[A-Za-z_$][\w$]*/
 const stripStringRE = /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*\$\{|\}(?:[^`\\]|\\.)*`|`(?:[^`\\]|\\.)*`/g
 
 // detect problematic expressions in a template
-export function detectErrors (ast: ?ASTNode): Array<string> {
-  const errors: Array<string> = []
+export function detectErrors(ast) {
+  const errors = []
   if (ast) {
     checkNode(ast, errors)
   }
   return errors
 }
 
-function checkNode (node: ASTNode, errors: Array<string>) {
+function checkNode(node, errors) {
   if (node.type === 1) {
     for (const name in node.attrsMap) {
       if (dirRE.test(name)) {
@@ -56,9 +56,9 @@ function checkNode (node: ASTNode, errors: Array<string>) {
   }
 }
 
-function checkEvent (exp: string, text: string, errors: Array<string>) {
+function checkEvent(exp, text, errors) {
   const stipped = exp.replace(stripStringRE, '')
-  const keywordMatch: any = stipped.match(unaryOperatorsRE)
+  const keywordMatch = stipped.match(unaryOperatorsRE)
   if (keywordMatch && stipped.charAt(keywordMatch.index - 1) !== '$') {
     errors.push(
       `avoid using JavaScript unary operator as property name: ` +
@@ -68,20 +68,20 @@ function checkEvent (exp: string, text: string, errors: Array<string>) {
   checkExpression(exp, text, errors)
 }
 
-function checkFor (node: ASTElement, text: string, errors: Array<string>) {
+function checkFor(node, text, errors) {
   checkExpression(node.for || '', text, errors)
   checkIdentifier(node.alias, 'v-for alias', text, errors)
   checkIdentifier(node.iterator1, 'v-for iterator', text, errors)
   checkIdentifier(node.iterator2, 'v-for iterator', text, errors)
 }
 
-function checkIdentifier (ident: ?string, type: string, text: string, errors: Array<string>) {
+function checkIdentifier(ident, type, text, errors) {
   if (typeof ident === 'string' && !identRE.test(ident)) {
     errors.push(`invalid ${type} "${ident}" in expression: ${text.trim()}`)
   }
 }
 
-function checkExpression (exp: string, text: string, errors: Array<string>) {
+function checkExpression(exp, text, errors) {
   try {
     new Function(`return ${exp}`)
   } catch (e) {

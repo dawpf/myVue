@@ -2,45 +2,45 @@
 
 import { parseFilters } from './parser/filter-parser'
 
-export function baseWarn (msg: string) {
+export function baseWarn(msg) {
   console.error(`[Vue compiler]: ${msg}`)
 }
 
-export function pluckModuleFunction<F: Function> (
-  modules: ?Array<Object>,
-  key: string
-): Array<F> {
+export function pluckModuleFunction(
+  modules,
+  key
+) {
   return modules
     ? modules.map(m => m[key]).filter(_ => _)
     : []
 }
 
-export function addProp (el: ASTElement, name: string, value: string) {
+export function addProp(el, name, value) {
   (el.props || (el.props = [])).push({ name, value })
 }
 
-export function addAttr (el: ASTElement, name: string, value: string) {
+export function addAttr(el, name, value) {
   (el.attrs || (el.attrs = [])).push({ name, value })
 }
 
-export function addDirective (
-  el: ASTElement,
-  name: string,
-  rawName: string,
-  value: string,
-  arg: ?string,
-  modifiers: ?ASTModifiers
+export function addDirective(
+  el,
+  name,
+  rawName,
+  value,
+  arg,
+  modifiers
 ) {
   (el.directives || (el.directives = [])).push({ name, rawName, value, arg, modifiers })
 }
 
-export function addHandler (
-  el: ASTElement,
-  name: string,
-  value: string,
-  modifiers: ?ASTModifiers,
-  important?: boolean,
-  warn?: Function
+export function addHandler(
+  el,
+  name,
+  value,
+  modifiers,
+  important,
+  warn
 ) {
   // warn prevent and passive modifier
   /* istanbul ignore if */
@@ -86,11 +86,11 @@ export function addHandler (
   }
 }
 
-export function getBindingAttr (
-  el: ASTElement,
-  name: string,
-  getStatic?: boolean
-): ?string {
+export function getBindingAttr(
+  el,
+  name,
+  getStatic
+) {
   const dynamicValue =
     getAndRemoveAttr(el, ':' + name) ||
     getAndRemoveAttr(el, 'v-bind:' + name)
@@ -108,11 +108,11 @@ export function getBindingAttr (
 // doesn't get processed by processAttrs.
 // By default it does NOT remove it from the map (attrsMap) because the map is
 // needed during codegen.
-export function getAndRemoveAttr (
-  el: ASTElement,
-  name: string,
-  removeFromMap?: boolean
-): ?string {
+export function getAndRemoveAttr(
+  el,
+  name,
+  removeFromMap
+) {
   let val
   if ((val = el.attrsMap[name]) != null) {
     const list = el.attrsList

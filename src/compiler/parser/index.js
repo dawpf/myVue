@@ -31,7 +31,7 @@ const modifierRE = /\.[^.]+/g
 const decodeHTMLCached = cached(he.decode)
 
 // configurable state
-export let warn: any
+export let warn
 let delimiters
 let transforms
 let preTransforms
@@ -40,13 +40,13 @@ let platformIsPreTag
 let platformMustUseProp
 let platformGetTagNamespace
 
-type Attr = { name: string; value: string };
+let Attr;
 
-export function createASTElement (
-  tag: string,
-  attrs: Array<Attr>,
-  parent: ASTElement | void
-): ASTElement {
+export function createASTElement(
+  tag,
+  attrs,
+  parent
+) {
   return {
     type: 1,
     tag,
@@ -60,10 +60,10 @@ export function createASTElement (
 /**
  * Convert HTML string to AST.
  */
-export function parse (
-  template: string,
-  options: CompilerOptions
-): ASTElement | void {
+export function parse(
+  template,
+  options
+) {
   warn = options.warn || baseWarn
 
   platformIsPreTag = options.isPreTag || no
@@ -84,14 +84,14 @@ export function parse (
   let inPre = false
   let warned = false
 
-  function warnOnce (msg) {
+  function warnOnce(msg) {
     if (!warned) {
       warned = true
       warn(msg)
     }
   }
 
-  function endPre (element) {
+  function endPre(element) {
     // check pre state
     if (element.pre) {
       inVPre = false
@@ -108,7 +108,7 @@ export function parse (
     canBeLeftOpenTag: options.canBeLeftOpenTag,
     shouldDecodeNewlines: options.shouldDecodeNewlines,
     shouldKeepComment: options.comments,
-    start (tag, attrs, unary) {
+    start(tag, attrs, unary) {
       // check namespace.
       // inherit parent ns if there is one
       const ns = (currentParent && currentParent.ns) || platformGetTagNamespace(tag)
@@ -119,7 +119,7 @@ export function parse (
         attrs = guardIESVGBug(attrs)
       }
 
-      let element: ASTElement = createASTElement(tag, attrs, currentParent)
+      let element = createASTElement(tag, attrs, currentParent)
       if (ns) {
         element.ns = ns
       }
@@ -158,7 +158,7 @@ export function parse (
         processElement(element, options)
       }
 
-      function checkRootConstraints (el) {
+      function checkRootConstraints(el) {
         if (process.env.NODE_ENV !== 'production') {
           if (el.tag === 'slot' || el.tag === 'template') {
             warnOnce(
@@ -201,7 +201,7 @@ export function parse (
         } else if (element.slotScope) { // scoped slot
           currentParent.plain = false
           const name = element.slotTarget || '"default"'
-          ;(currentParent.scopedSlots || (currentParent.scopedSlots = {}))[name] = element
+            ; (currentParent.scopedSlots || (currentParent.scopedSlots = {}))[name] = element
         } else {
           currentParent.children.push(element)
           element.parent = currentParent
@@ -219,7 +219,7 @@ export function parse (
       }
     },
 
-    end () {
+    end() {
       // remove trailing whitespace
       const element = stack[stack.length - 1]
       const lastNode = element.children[element.children.length - 1]
@@ -232,7 +232,7 @@ export function parse (
       endPre(element)
     },
 
-    chars (text: string) {
+    chars(text) {
       if (!currentParent) {
         if (process.env.NODE_ENV !== 'production') {
           if (text === template) {
@@ -276,7 +276,7 @@ export function parse (
         }
       }
     },
-    comment (text: string) {
+    comment(text) {
       currentParent.children.push({
         type: 3,
         text,
@@ -287,13 +287,13 @@ export function parse (
   return root
 }
 
-function processPre (el) {
+function processPre(el) {
   if (getAndRemoveAttr(el, 'v-pre') != null) {
     el.pre = true
   }
 }
 
-function processRawAttrs (el) {
+function processRawAttrs(el) {
   const l = el.attrsList.length
   if (l) {
     const attrs = el.attrs = new Array(l)
@@ -309,7 +309,7 @@ function processRawAttrs (el) {
   }
 }
 
-export function processElement (element: ASTElement, options: CompilerOptions) {
+export function processElement(element, options) {
   processKey(element)
 
   // determine whether this is a plain element after
@@ -325,7 +325,7 @@ export function processElement (element: ASTElement, options: CompilerOptions) {
   processAttrs(element)
 }
 
-function processKey (el) {
+function processKey(el) {
   const exp = getBindingAttr(el, 'key')
   if (exp) {
     if (process.env.NODE_ENV !== 'production' && el.tag === 'template') {
@@ -335,7 +335,7 @@ function processKey (el) {
   }
 }
 
-function processRef (el) {
+function processRef(el) {
   const ref = getBindingAttr(el, 'ref')
   if (ref) {
     el.ref = ref
@@ -343,7 +343,7 @@ function processRef (el) {
   }
 }
 
-export function processFor (el: ASTElement) {
+export function processFor(el) {
   let exp
   if ((exp = getAndRemoveAttr(el, 'v-for'))) {
     const inMatch = exp.match(forAliasRE)
@@ -368,7 +368,7 @@ export function processFor (el: ASTElement) {
   }
 }
 
-function processIf (el) {
+function processIf(el) {
   const exp = getAndRemoveAttr(el, 'v-if')
   if (exp) {
     el.if = exp
@@ -387,7 +387,7 @@ function processIf (el) {
   }
 }
 
-function processIfConditions (el, parent) {
+function processIfConditions(el, parent) {
   const prev = findPrevElement(parent.children)
   if (prev && prev.if) {
     addIfCondition(prev, {
@@ -402,7 +402,7 @@ function processIfConditions (el, parent) {
   }
 }
 
-function findPrevElement (children: Array<any>): ASTElement | void {
+function findPrevElement(children) {
   let i = children.length
   while (i--) {
     if (children[i].type === 1) {
@@ -419,21 +419,21 @@ function findPrevElement (children: Array<any>): ASTElement | void {
   }
 }
 
-export function addIfCondition (el: ASTElement, condition: ASTIfCondition) {
+export function addIfCondition(el, condition) {
   if (!el.ifConditions) {
     el.ifConditions = []
   }
   el.ifConditions.push(condition)
 }
 
-function processOnce (el) {
+function processOnce(el) {
   const once = getAndRemoveAttr(el, 'v-once')
   if (once != null) {
     el.once = true
   }
 }
 
-function processSlot (el) {
+function processSlot(el) {
   if (el.tag === 'slot') {
     el.slotName = getBindingAttr(el, 'name')
     if (process.env.NODE_ENV !== 'production' && el.key) {
@@ -473,7 +473,7 @@ function processSlot (el) {
   }
 }
 
-function processComponent (el) {
+function processComponent(el) {
   let binding
   if ((binding = getBindingAttr(el, 'is'))) {
     el.component = binding
@@ -483,7 +483,7 @@ function processComponent (el) {
   }
 }
 
-function processAttrs (el) {
+function processAttrs(el) {
   const list = el.attrsList
   let i, l, name, rawName, value, modifiers, isProp
   for (i = 0, l = list.length; i < l; i++) {
@@ -559,7 +559,7 @@ function processAttrs (el) {
   }
 }
 
-function checkInFor (el: ASTElement): boolean {
+function checkInFor(el) {
   let parent = el
   while (parent) {
     if (parent.for !== undefined) {
@@ -570,7 +570,7 @@ function checkInFor (el: ASTElement): boolean {
   return false
 }
 
-function parseModifiers (name: string): Object | void {
+function parseModifiers(name) {
   const match = name.match(modifierRE)
   if (match) {
     const ret = {}
@@ -579,7 +579,7 @@ function parseModifiers (name: string): Object | void {
   }
 }
 
-function makeAttrsMap (attrs: Array<Object>): Object {
+function makeAttrsMap(attrs) {
   const map = {}
   for (let i = 0, l = attrs.length; i < l; i++) {
     if (
@@ -594,11 +594,11 @@ function makeAttrsMap (attrs: Array<Object>): Object {
 }
 
 // for script (e.g. type="x/template") or style, do not decode content
-function isTextTag (el): boolean {
+function isTextTag(el) {
   return el.tag === 'script' || el.tag === 'style'
 }
 
-function isForbiddenTag (el): boolean {
+function isForbiddenTag(el) {
   return (
     el.tag === 'style' ||
     (el.tag === 'script' && (
@@ -612,7 +612,7 @@ const ieNSBug = /^xmlns:NS\d+/
 const ieNSPrefix = /^NS\d+:/
 
 /* istanbul ignore next */
-function guardIESVGBug (attrs) {
+function guardIESVGBug(attrs) {
   const res = []
   for (let i = 0; i < attrs.length; i++) {
     const attr = attrs[i]
@@ -624,7 +624,7 @@ function guardIESVGBug (attrs) {
   return res
 }
 
-function checkForAliasModel (el, value) {
+function checkForAliasModel(el, value) {
   let _el = el
   while (_el) {
     if (_el.for && _el.alias === value) {
